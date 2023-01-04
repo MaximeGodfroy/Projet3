@@ -1,7 +1,6 @@
 let token = "";
 
-document.getElementById("form").addEventListener('submit', function(e){
-    e.preventDefault();
+document.getElementById("form").addEventListener('submit', function(){
     let email = document.getElementById("email");
     let password = document.getElementById("password");
     let user = {
@@ -23,7 +22,8 @@ document.getElementById("form").addEventListener('submit', function(e){
     }
 })
     .then(function(value){
-        return token = value.token;
+        alert("Vous vous êtes bien connecté")
+        return value.token;
     })
     .catch(function (err) {
         // Une erreur est survenue
