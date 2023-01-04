@@ -1,7 +1,4 @@
-let tokenUser = "";
-
-document.getElementById("form").addEventListener('submit', function(e){
-    e.preventDefault();
+document.getElementById("form").addEventListener('submit', function(){
     let email = document.getElementById("email");
     let password = document.getElementById("password");
     let user = {
@@ -24,7 +21,7 @@ document.getElementById("form").addEventListener('submit', function(e){
     }
 })
     .then(function(value){
-        tokenUser = value.token;
+        console.log(value.token);
     })
     .catch(function (err) {
         // Une erreur est survenue

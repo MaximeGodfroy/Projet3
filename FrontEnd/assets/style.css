@@ -224,3 +224,98 @@ margin: auto;
 #login p{
 	margin-bottom: 379px;
 }
+
+.login {
+	font-weight: 600;
+}
+
+#edition {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: black;
+	height: 60px;
+	margin: 0 0 38px 0;
+}
+
+#header_edit {
+	display: flex;
+	flex-direction: column;
+}
+
+#nav_edit {
+	display: flex;
+	justify-content: space-between;
+}
+
+#mode {
+	color: #FFFFFF;
+	margin-right: 20px;
+}
+
+#edition i {
+	margin-right: 12px;
+}
+
+a {
+	text-decoration: none;
+	color: #000000;
+}
+
+#introduction > figure > figcaption {
+	margin-top: 11px;
+	margin-left: 41.25px;
+}
+
+#introduction > figure > figcaption > i {
+	margin-right: 11px;
+}
+
+#projets {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 50px;
+}
+
+#projets i, article > a > i {
+	display: flex;
+	float: left;
+}
+
+i {
+	margin-right: 11px;
+}
+
+#projets > a > p {
+	margin-left: 31px;
+}
+
+#projets h2 {
+	margin-bottom: 0;
+}
+
+#modifs {
+	background-color: #FFFFFF;
+	border-radius: 60px;
+	padding: 11px 23px;
+	font-weight: 500;
+}
+
+.modale {
+	position: fixed;
+	display: flex;	
+	align-items: center;
+	justify-content: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.3);
+}
+
+#fenetre_modale {
+	background-color: #FFFFFF;
+	width: 50%;
+	height: 60%;
+}

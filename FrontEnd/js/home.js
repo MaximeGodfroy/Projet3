@@ -4,16 +4,28 @@ document.querySelector(".gallery").innerHTML = "";
 const sectionPortfolio = document.getElementById('portfolio');
 const divGallery = document.querySelector(".gallery");
 
-// Création du menu filtres en insérant le code HTML
+// Création du menu filtres avec createElement et appendChild
 
 const createFiltres = document.createElement("div");
 createFiltres.id = "filtres";
 sectionPortfolio.insertBefore(createFiltres, divGallery);
 const divFiltres = document.getElementById("filtres");
-divFiltres.innerHTML = `<div id="tous">Tous</div>
-                        <div id="objets">Objets</div>
-                        <div id="apparts">Appartements</div>
-                        <div id="hotels">Hôtels & restaurants</div>`;
+let filtreTous = document.createElement("div");
+filtreTous.innerHTML = "Tous";
+filtreTous.id = "tous";
+let filtreObjets = document.createElement("div");
+filtreObjets.innerHTML = "Objets";
+filtreObjets.id = "objets";
+let filtreApparts = document.createElement("div");
+filtreApparts.innerHTML = "Appartements";
+filtreApparts.id = "apparts";
+let filtreHotels = document.createElement("div");
+filtreHotels.innerHTML = "Hôtels & restaurants";
+filtreHotels.id = "hotels";
+divFiltres.appendChild(filtreTous);
+divFiltres.appendChild(filtreObjets);
+divFiltres.appendChild(filtreApparts);
+divFiltres.appendChild(filtreHotels);
 const divTous = document.getElementById("tous");
 const divObjets = document.getElementById("objets");
 const divApparts = document.getElementById("apparts");
@@ -36,7 +48,6 @@ let stylesFiltres = {
     "marginRight": "10px",
     "padding": "10px",
     "textAlign": "center",
-    "hover": 'textDecoration: "underline"'
 };
 
 Object.assign(divTous.style, stylesFiltres);
@@ -78,11 +89,7 @@ fetch("http://localhost:5678/api/works")
             divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
             divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
             divGallery.querySelector("figure:last-child figcaption").append(work.title);
-            // Ci-dessous dans les commentaires : manière plus rapide d'ajouter les élements à la gallerie
-            //document.querySelector(".gallery").innerHTML += `<figure>
-            //<img src="${work.imageUrl}" alt="${work.title}" crossorigin>
-            //<figcaption>${work.title}</figcaption>
-            //</figure>`
+            afficheFiltres();
         }
     })
 
@@ -134,7 +141,7 @@ divHotels.onmouseout = function()
 
 // Fonction qui filtre les travaux en fonction du filtre cliqué retardée pour que le fetch ait le temps de se charger
 
-setTimeout(function () {
+function afficheFiltres() {
     const allWorks = divGallery.innerHTML;
         divObjets.addEventListener('click', function () {
         divGallery.innerHTML = allWorks;
@@ -145,12 +152,10 @@ setTimeout(function () {
         const selectNonObjets = divGallery.querySelectorAll("figure");
         const monSet = new Set();
         for (let i = 0; i < selectNonObjets.length; i++) {
-            console.log(selectNonObjets[i].id);
             if (selectNonObjets[i].classList != "Objets") {
-                console.log(selectNonObjets[i].id);
                 monSet.add(selectNonObjets[i].id)
             }
-        } console.log(monSet);
+        }
         for (let item of monSet) {
             divGallery.removeChild(document.getElementById(item));
         }
@@ -165,12 +170,10 @@ setTimeout(function () {
         const selectNonApparts = divGallery.querySelectorAll("figure");
         const monSet = new Set();
         for (let i = 0; i < selectNonApparts.length; i++) {
-            console.log(selectNonApparts[i].id);
             if (selectNonApparts[i].classList != "Appartements") {
-                console.log(selectNonApparts[i].id);
                 monSet.add(selectNonApparts[i].id)
             }
-        } console.log(monSet);
+        }
         for (let item of monSet) {
             divGallery.removeChild(document.getElementById(item));
         }
@@ -185,12 +188,10 @@ setTimeout(function () {
         const selectNonHotels = divGallery.querySelectorAll("figure");
         const monSet = new Set();
         for (let i = 0; i < selectNonHotels.length; i++) {
-            console.log(selectNonHotels[i].id);
             if (selectNonHotels[i].classList != "Hotels & restaurants") {
-                console.log(selectNonHotels[i].id);
                 monSet.add(selectNonHotels[i].id)
             }
-        } console.log(monSet);
+        }
         for (let item of monSet) {
             divGallery.removeChild(document.getElementById(item));
         }
@@ -204,6 +205,5 @@ setTimeout(function () {
         Object.assign(divObjets.style, styleFiltreInactif);
         }
     )
-
-}, 1200);
+    }
 
