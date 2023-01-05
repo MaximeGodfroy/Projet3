@@ -8,6 +8,8 @@ fetch("http://localhost:5678/api/works")
         for (let jsonWorks of jsonListWorks) {
             let work = new Works(jsonWorks);
             divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+            divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-regular fa-trash-can");
+            divGalerieModale.querySelector("figure:last-child i").setAttribute("style", "color: #FFFFFF");
             divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
             divGalerieModale.querySelector("figure:last-child").setAttribute("id", work.id);
             divGalerieModale.querySelector("figure:last-child").setAttribute("class", work.category.name);
@@ -15,8 +17,9 @@ fetch("http://localhost:5678/api/works")
             divGalerieModale.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
             divGalerieModale.querySelector("figure:last-child img").setAttribute("alt", work.title);
             divGalerieModale.querySelector("figure:last-child figcaption").append("éditer");
-            afficheFiltres();
-        }
+        } 
+        divGalerieModale.querySelector("figure:first-child").appendChild(document.createElement('i')).setAttribute("class", "fa-solid fa-up-down-left-right");
+        divGalerieModale.querySelector("figure:first-child i").setAttribute("style", "color: #FFFFFF");
     })
 
     .catch(function (err) {

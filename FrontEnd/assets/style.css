@@ -188,7 +188,7 @@ footer nav ul {
 
 #login {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 
 #login > * {
@@ -324,7 +324,7 @@ i {
 	align-items: center;
 }
 
-#fenetre-modale button {
+.js-fermer-modale {
 	position: absolute;
 	top: 32px;
 	right: 36px;
@@ -352,12 +352,68 @@ i {
 	width: 70%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	grid-column-gap: 6px;
+	grid-column-gap: 8px;
 	grid-row-gap: 11px;
 	margin-top: 50px;
 	margin-bottom: 50px;
+	padding-bottom: 50px;
+	border-bottom: 1px solid #B3B3B3;
 }
 
 .galerie-modale img {
 	width: 100%;
+	position: relative;
+}
+
+#ajouter-photo {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	width: 180px;
+	text-align: center;
+	border-radius: 60px;
+	font-size: 1.2em;
+	padding: 20px 50px;
+}
+
+#fenetre-modale a {
+	align-items: center;
+}
+
+#suppression-galerie {
+	margin: 20px 0;
+	font-family: 'Syne';
+	font-size: 14px;
+	font-weight: 400;
+	color: #d65353;
+	width: 180px;
+	text-align: center;
+	border: none;
+	background-color: #FFFFFF;
+	border-bottom: 50px;
+}
+
+#suppression-galerie:hover {
+	text-decoration: underline;
+}
+
+.galerie-modale figure{
+	position: relative;
+}
+
+.fa-trash-can {
+	position: absolute;
+	right: 6px;
+	top: 6px;
+	color: #FFFFFF;
+
+}
+
+.fa-up-down-left-right {
+	position: absolute;
+	right: 26px;
+	top: 6px;
+	color: #FFFFFF;
+
 }
