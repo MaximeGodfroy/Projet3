@@ -15,14 +15,14 @@
 </head>
 
 <body>
-	<header id="header_edit">
+	<header id="header-edit">
 		<div id="edition">
-			<a href="modale">
+			<a href="#modale" class="js-modale">
 				<p id="mode"><i class="fa-regular fa-pen-to-square"></i>Mode édition</p>
 			</a>
 			<p id="modifs">publier les changements</p>
 		</div>
-		<div id="nav_edit">
+		<div id="nav-edit">
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
 				<ul>
@@ -34,19 +34,21 @@
 			</nav>
 		</div>
 	</header>
-	<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale_titre">
-		<div id="fenetre_modale">
-			<p id="modale_titre">Gallerie photo</p>
+	<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre" style="display: none">
+		<div id="fenetre-modale" class="js-stop-modale">
+			<button class="js-fermer-modale"><i class="fa-solid fa-xmark fa-2xl"></i></button>
+			<p id="modale-titre">Galerie photo</p>
+			<div class="galerie-modale"></div>
 		</div>
 	</aside>
 	<main>
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
-				<figcaption><i class="fa-regular fa-pen-to-square"></i>modifier</figcaption>
+				<figcaption><a href="#modale" class="js-modale"><i class="fa-regular fa-pen-to-square"></i>modifier</a></figcaption>
 			</figure>
 			<article>
-				<a href="modale">
+				<a href="#modale" class="js-modale">
 					<p><i class="fa-regular fa-pen-to-square"></i>modifier</p>
 				</a>
 				<h2>Designer d'espace</h2>
@@ -62,7 +64,7 @@
 		<section id="portfolio">
 			<div id="projets">
 				<h2>Mes Projets</h2>
-				<a href="modale">
+				<a href="#modale" class="js-modale">
 					<p><i class="fa-regular fa-pen-to-square"></i>modifier</p>
 				</a>
 			</div>
@@ -137,6 +139,7 @@
 	</footer>
 	<script src="js/works.js"></script>
 	<script src="js/home.js"></script>
+	<script src="js/modale.js"></script>
 </body>
 
 </html>

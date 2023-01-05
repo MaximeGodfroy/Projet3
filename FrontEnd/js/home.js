@@ -80,7 +80,6 @@ fetch("http://localhost:5678/api/works")
     .then(jsonListWorks => {
         for (let jsonWorks of jsonListWorks) {
             let work = new Works(jsonWorks);
-            console.log(work);
             divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
             divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
             divGallery.querySelector("figure:last-child").setAttribute("id", work.id);
@@ -95,7 +94,8 @@ fetch("http://localhost:5678/api/works")
 
     .catch(function (err) {
         // Une erreur est survenue
-    });
+});
+
 
 // Styles de soulignage des filtres au passage de la souris
 
