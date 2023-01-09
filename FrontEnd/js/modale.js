@@ -234,6 +234,7 @@ const ouvrirModale = function (e) {
     cible.removeAttribute("aria-hidden");
     cible.setAttribute("aria-model", "true");
     modale = cible;
+    ouvrirModale2;
     modale.addEventListener("click", fermerModale);
     modale.querySelector(".js-fermer-modale").addEventListener("click", fermerModale);
     modale.querySelector(".js-stop-modale").addEventListener("click", stopPropagation);    
@@ -291,3 +292,35 @@ function supprimerTravail() {
 })
     })
 }
+
+let modale2 = null;
+const cible2 = document.getElementById("modale2");
+
+const ouvrirModale2 = function (e) {
+    e.preventDefault();
+    fermerModale;
+    cible2.style.display = null;
+    cible2.removeAttribute("aria-hidden");
+    cible2.setAttribute("aria-model", "true");
+    modale2 = cible2;
+    modale2.addEventListener("click", fermerModale2);
+    modale2.querySelector(".js-fermer-modale2").addEventListener("click", fermerModale2);
+    modale2.querySelector(".js-retour").addEventListener("click", ouvrirModale, fermerModale2);
+    modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);    
+}
+
+const fermerModale2 = function (e) {
+    if (modale2 === null) return;
+    e.preventDefault();
+    modale2.style.display = "none";
+    modale2.setAttribute("aria-hidden", "true");
+    modale2.removeAttribute("aria-model");
+    modale2.removeEventListener("click", fermerModale2);
+    modale2.querySelector(".js-fermer-modale2").removeEventListener("click", fermerModale2);
+    modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);
+    modale2 = null;
+}
+
+document.querySelectorAll(".js-modale2").forEach(a => {
+    a.addEventListener("click", ouvrirModale2)
+})

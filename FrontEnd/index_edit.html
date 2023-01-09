@@ -34,29 +34,55 @@
 			</nav>
 		</div>
 	</header>
-	<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre" style="display: none">
+	<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre"
+		style="display: none">
 		<div id="fenetre-modale" class="js-stop-modale">
 			<button class="js-fermer-modale"><i class="fa-solid fa-xmark fa-2xl"></i></button>
 			<p id="modale-titre">Galerie photo</p>
 			<div id="galerie-modale"></div>
-			<a href="#modale2" class="js-modale"><p id="ajouter-photo">Ajouter une photo</p></a>
+			<a href="#modale2" class="js-modale2">
+				<p id="ajouter-photo">Ajouter une photo</p>
+			</a>
 			<button id="suppression-galerie">Supprimer la galerie</button>
 		</div>
 	</aside>
-	<aside id="modale2" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre" style="display: none">
+	<aside id="modale2" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre2"
+		style="display: none">
 		<div id="fenetre-modale2" class="js-stop-modale2">
-			<button class="js-fermer-modale2"><i class="fa-solid fa-xmark fa-2xl"></i></button>
-			<p id="modale-titre">Ajout photo</p>
-			<div id="ajout-photo">
-				<i class="fa-thin fa-image-landscape"></i>
-				<a href="#modale2" class="js-modale"><p id="ajouter-photo">Ajouter une photo</p></a>
+			<div id="retourfermer">
+				<a href="#modale" class="js-modale">
+					<button class="js-retour"><i class="fa-light fa-arrow-left fa-2xl"></i></button>
+				</a>
+				<button class="js-fermer-modale2"><i class="fa-solid fa-xmark fa-2xl"></i></button>
 			</div>
+			<p id="modale-titre2">Ajout photo</p>
+			<form id="ajout-photo">
+				<div id="ajout-image">
+					<i class="fa-thin fa-image-landscape"></i>
+					<input type="file" id="myfile" name="myfile" accept=".jpg, .png" value="+ Ajouter photo" required>
+					<p>jpg, png : 4mo max</p>
+				</div>
+				<div class="form-sous-photo">
+					<label for="titre">Titre</label><br/>
+					<input type="text" name="titre" id="titre" required><br/>
+					<label for="categorie">Catégorie</label><br/>
+					<select name="categorie" id="categorie">
+						<option value="Objets">Objets</option>
+						<option value="Appartements">Appartements</option>
+						<option value="Hotels & restaurants">Hotels & restaurants</option>
+					</select>
+					<a href="#modale3" class="js-modale3">
+						<p id="valider">Valider</p>
+					</a>
+				</div>
+			</form>
 	</aside>
 	<main>
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
-				<figcaption><a href="#modale" class="js-modale"><i class="fa-regular fa-pen-to-square"></i>modifier</a></figcaption>
+				<figcaption><a href="#modale" class="js-modale"><i class="fa-regular fa-pen-to-square"></i>modifier</a>
+				</figcaption>
 			</figure>
 			<article>
 				<a href="#modale" class="js-modale">

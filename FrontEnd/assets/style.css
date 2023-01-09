@@ -292,7 +292,7 @@ a {
 	float: left;
 }
 
-i {
+header i, main i {
 	margin-right: 11px;
 }
 
@@ -311,7 +311,7 @@ i {
 	font-weight: 500;
 }
 
-.modale {
+.modale, .modale2 {
 	position: fixed;
 	display: flex;	
 	align-items: center;
@@ -323,7 +323,7 @@ i {
 	background: rgba(0, 0, 0, 0.3);
 }
 
-#fenetre-modale {
+#fenetre-modale, #fenetre-modale2 {
 	background-color: #FFFFFF;
 	width: 50%;
 	position: relative;
@@ -444,4 +444,62 @@ i {
 
 .poubelles:hover {
 	cursor: pointer;
+}
+
+#ajout-image {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#retourfermer {
+	display: flex;
+	justify-content: space-between;
+	width: 85%;
+	padding: 32px 36px 0 36px;
+}
+
+.js-fermer-modale2 {
+	background-color: #FFFFFF;
+	border: none;
+}
+
+.js-retour i {
+	background-color: #FFFFFF;
+	border: none;
+	color: #000000;
+}
+
+#modale-titre2 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.form-sous-photo {
+	margin: 20px 0 20px 0;
+}
+
+.form-sous-photo input, .form-sous-photo select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	width: 100%;
+	margin: 10px 0 10px 0;
+	padding: 0;
+}
+
+.form-sous-photo input {
+	text-align: center;
+}
+
+.form-sous-photo label {
+	margin: 20px 0 10px 0;
+}
+
+#modale-titre2 {
+	text-align: center;
+	margin: 20px;
+	font-size: 26px;
 }
