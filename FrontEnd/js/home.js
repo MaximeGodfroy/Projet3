@@ -88,8 +88,7 @@ fetch("http://localhost:5678/api/works")
             divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
             divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
             divGallery.querySelector("figure:last-child figcaption").append(work.title);
-            afficheFiltres();
-        }
+        } afficheFiltres();
     })
 
     .catch(function (err) {
