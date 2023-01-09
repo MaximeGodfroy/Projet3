@@ -1,5 +1,3 @@
-let token = "";
-
 document.getElementById("form").addEventListener('submit', function(){
     let email = document.getElementById("email");
     let password = document.getElementById("password");
@@ -18,16 +16,16 @@ document.getElementById("form").addEventListener('submit', function(){
 })
     .then(function(res){
     if(res.ok){
+        alert("Vous vous êtes bien connecté");
         return res.json();
     }
 })
     .then(function(value){
-        alert("Vous vous êtes bien connecté")
-        return value.token;
+        console.log(value.token);
     })
     .catch(function (err) {
         // Une erreur est survenue
-        alert("Le nom d'utilisateur et le mot de passe ne correspondent pas");
+        alert("Erreur dans l’identifiant ou le mot de passe");
     });
 }  
 );

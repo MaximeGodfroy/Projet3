@@ -3,6 +3,7 @@ document.querySelector(".gallery").innerHTML = "";
 
 const sectionPortfolio = document.getElementById('portfolio');
 const divGallery = document.querySelector(".gallery");
+const divGalerieModale = document.getElementById("galerie-modale");
 
 // Création du menu filtres avec createElement et appendChild
 
@@ -82,13 +83,28 @@ fetch("http://localhost:5678/api/works")
             let work = new Works(jsonWorks);
             divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
             divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
-            divGallery.querySelector("figure:last-child").setAttribute("id", work.id);
+            divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
             divGallery.querySelector("figure:last-child").setAttribute("class", work.category.name);
             divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
             divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
             divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
             divGallery.querySelector("figure:last-child figcaption").append(work.title);
-        } afficheFiltres();
+            divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+            divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('div')).setAttribute("class", "poubelles");
+            divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-regular fa-trash-can fa-2xs");
+            divGalerieModale.querySelector("figure:last-child i").setAttribute("style", "color: #FFFFFF");
+            divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+            divGalerieModale.querySelector("figure:last-child").setAttribute("id", "galerie-modale" + work.id);
+            divGalerieModale.querySelector("figure:last-child").setAttribute("class", work.category.name);
+            divGalerieModale.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+            divGalerieModale.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+            divGalerieModale.querySelector("figure:last-child img").setAttribute("alt", work.title);
+            divGalerieModale.querySelector("figure:last-child figcaption").append("éditer");
+        } 
+        divGalerieModale.querySelector("figure:first-child").appendChild(document.createElement('div'));
+        divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-solid fa-up-down-left-right fa-2xs");
+        divGalerieModale.querySelector("div:last-child").id = "move";
+        afficheFiltres();
     })
 
     .catch(function (err) {
@@ -205,4 +221,38 @@ function afficheFiltres() {
         }
     )
     }
+
+let modale = null;
+const cible = document.getElementById("modale");
+
+const ouvrirModale = function (e) {
+    e.preventDefault();
+    cible.style.display = null;
+    cible.removeAttribute("aria-hidden");
+    cible.setAttribute("aria-model", "true");
+    modale = cible;
+    modale.addEventListener("click", fermerModale);
+    modale.querySelector(".js-fermer-modale").addEventListener("click", fermerModale);
+    modale.querySelector(".js-stop-modale").addEventListener("click", stopPropagation);    
+}
+
+const fermerModale = function (e) {
+    if (modale === null) return;
+    e.preventDefault();
+    modale.style.display = "none";
+    modale.setAttribute("aria-hidden", "true");
+    modale.removeAttribute("aria-model");
+    modale.removeEventListener("click", fermerModale);
+    modale.querySelector(".js-fermer-modale").removeEventListener("click", fermerModale);
+    modale.querySelector(".js-stop-modale").addEventListener("click", stopPropagation);
+    modale = null;
+}
+
+const stopPropagation = function (e) {
+    e.stopPropagation();
+}
+
+document.querySelectorAll(".js-modale").forEach(a => {
+    a.addEventListener("click", ouvrirModale)
+})
 

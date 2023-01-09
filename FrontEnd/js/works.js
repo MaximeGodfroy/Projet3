@@ -7,3 +7,9 @@ class Works{
         jsonWorks && Object.assign(this, jsonWorks);
     }
 }
+
+class WorksModale{
+    constructor(jsonWorksModale){
+        jsonWorksModale && Object.assign(this, jsonWorksModale);
+    }
+}
