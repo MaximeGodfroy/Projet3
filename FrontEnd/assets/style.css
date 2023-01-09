@@ -125,6 +125,11 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+#tous:hover, #objets:hover, #apparts:hover, #hotels:hover {
+	cursor: pointer;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;

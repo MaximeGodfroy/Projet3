@@ -74,7 +74,7 @@ let styleFiltreInactif = {
     "backgroundColor": "#FFFFFF"
 }
 
-// Requête fetch pour récupérer l'ensemble des travaux
+// Requête fetch pour récupérer l'ensemble des travaux et les ajouter dans la section galerie et la fenêtre modale
 
 fetch("http://localhost:5678/api/works")
     .then(data => data.json())
@@ -91,6 +91,7 @@ fetch("http://localhost:5678/api/works")
             divGallery.querySelector("figure:last-child figcaption").append(work.title);
             divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
             divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('div')).setAttribute("class", "poubelles");
+            divGalerieModale.querySelector("div:last-child").setAttribute("id", "poubelle" + work.id);
             divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-regular fa-trash-can fa-2xs");
             divGalerieModale.querySelector("figure:last-child i").setAttribute("style", "color: #FFFFFF");
             divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
@@ -105,10 +106,12 @@ fetch("http://localhost:5678/api/works")
         divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-solid fa-up-down-left-right fa-2xs");
         divGalerieModale.querySelector("div:last-child").id = "move";
         afficheFiltres();
+        supprimerTravail();
     })
 
     .catch(function (err) {
         // Une erreur est survenue
+        console.log(err);
 });
 
 
@@ -256,3 +259,35 @@ document.querySelectorAll(".js-modale").forEach(a => {
     a.addEventListener("click", ouvrirModale)
 })
 
+function supprimerTravail() {
+    const allWorks = divGallery.innerHTML;
+    const worksModale = divGalerieModale.innerHTML;
+    document.querySelectorAll(".poubelles").forEach(poubelle => {
+        poubelle.addEventListener('click', function () {
+        divGallery.innerHTML = allWorks;
+        divGalerieModale.innerHTML = worksModale;
+        const idPoubelle = poubelle.id.split("poubelle")[1];
+        const url = "http://localhost:5678/api/works/" + idPoubelle;
+        fetch(url, {
+            method: "DELETE",
+            headers: {
+                'Accept': '/',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY3MzI5MzI0NCwiZXhwIjoxNjczMzc5NjQ0fQ.WNpy5cwnORBXbUX2IKqJ4-mGdE3fez8L5sMSfAoFi5M'
+        }})
+        .then(function (res) {
+            if (res.ok) {
+                alert("Le travail a bien été supprimé");
+                const idGaleriePoubelle = "galerie" + idPoubelle;
+                const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
+                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
+            }
+        })
+        
+        .catch(function (err) {
+            // Une erreur est survenue
+            alert("Erreur dans la suppression du travail");
+        });
+})
+    })
+}
