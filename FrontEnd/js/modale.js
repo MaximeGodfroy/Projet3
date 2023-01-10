@@ -107,6 +107,8 @@ fetch("http://localhost:5678/api/works")
         divGalerieModale.querySelector("div:last-child").id = "move";
         afficheFiltres();
         supprimerTravail();
+        telechargerPhoto();
+        annuleTelechargementPhoto();
     })
 
     .catch(function (err) {
@@ -333,6 +335,10 @@ document.querySelectorAll(".js-modale2").forEach(a => {
     a.addEventListener("click", ouvrirModale2)
 })
 
+
+
+
+function telechargerPhoto(){
 document.getElementById("myfile").addEventListener("change", function (){
      const fichierTelecharge = document.getElementById("myfile").files[0];
   if (fichierTelecharge.length === 0) {
@@ -347,6 +353,7 @@ document.getElementById("myfile").addEventListener("change", function (){
         if (fichierTelecharge.size < 32000000) {
             
             const image = document.createElement('img');
+            image.id = "imageTelechargee"
             image.src = URL.createObjectURL(fichierTelecharge);
             let styleImage = {
                 "max-width": "100%",
@@ -367,8 +374,54 @@ document.getElementById("myfile").addEventListener("change", function (){
     }
   }
 });
+}
+
+document.querySelector(".js-fermer-modale2").addEventListener("click", annuleTelechargementPhoto);
+document.querySelector(".js-retour").addEventListener("click", annuleTelechargementPhoto);
+
+function annuleTelechargementPhoto (){
+    if(document.getElementById("imageTelechargee") === document.getElementById("ajout-image").lastChild){
+    document.getElementById("ajout-image").getElementsByTagName("i")[0].removeAttribute("style", "display: none");
+    document.getElementById("ajout-image").getElementsByTagName("label")[0].removeAttribute("style", "display: none");
+    document.getElementById("ajout-image").getElementsByTagName("input")[0].removeAttribute("style", "display: none");
+    document.getElementById("ajout-image").getElementsByTagName("p")[0].removeAttribute("style", "display: none");
+    document.getElementById("ajout-image").removeChild(document.getElementById("imageTelechargee"));
+    } else { return null;}
+};
 
 /*
-modale2.querySelector(".js-fermer-modale2").addEventListener("click", fermerModale2);
-modale2.querySelector(".js-retour").removeEventListener("click", fermerModale2);)
+
+function recupDonneesPhoto (){
+    validerFormulaire();
+    let formElement = document.getElementById("ajout-photo");
+    formElement.addEventListener("submit", function(e) {
+    let formData = new FormData();
+
+    formData.append()
+
+    let request = new XMLHttpRequest();
+    request.open("POST", "submitform.php");
+    request.send(new FormData(formElement));
+    }
+    
+    
+    )
+
+}
+
+function validerFormulaire() {
+    
+    if (document.getElementById("imageTelechargee") === document.getElementById("ajout-image").lastChild) {
+        if (document.getElementById("categorie").value != "") {
+            document.getElementById("ajout-photo").removeAttribute("disabled");
+            document.getElementById("valider").onmouseover = function () {
+                this.style.cursor = "pointer";
+            }
+            document.getElementById("valider").onmouseout = function () {
+                this.style.cursor = "auto";
+            }
+        }
+    } else return null;
+}
+
 */
