@@ -451,7 +451,6 @@ header i, main i {
 	align-items: center;
 	background-color: #E8F1F7;
 	border-radius: 3px;
-	height: 170px;
 	width: 100%;
 }
 
@@ -470,6 +469,10 @@ header i, main i {
 .js-retour {
 	background-color: #FFFFFF;
 	border: none;
+}
+
+.js-fermer-modale2:hover, .js-retour:hover {
+	cursor: pointer;
 }
 
 #modale-titre2 {
@@ -504,10 +507,14 @@ header i, main i {
 	margin-top: 20px;
 }
 
+#bouton-ajout:hover {
+	cursor: pointer;
+}
+
 #myfile {
 	opacity: 0;
 	margin: 0;
-	font-size: 2px;
+	font-size: 0px;
 }
 
 #ajout-image p {
@@ -518,6 +525,7 @@ header i, main i {
 	line-height: 12px;
 	text-align: center;
 	color: #444444;
+	margin-bottom: 10px;
 	}
 
 .form-sous-photo {

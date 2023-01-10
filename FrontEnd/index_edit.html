@@ -56,11 +56,11 @@
 				<button class="js-fermer-modale2"><i class="fa-solid fa-xmark fa-2xl"></i></button>
 			</div>
 			<p id="modale-titre2">Ajout photo</p>
-			<form id="ajout-photo">
+			<form id="ajout-photo" enctype="multipart/form-data" method="post">
 				<div id="ajout-image">
 					<i class="fa-regular fa-image fa-4x"></i>
 					<label for="myfile" id="bouton-ajout">+ Ajouter photo</label>
-					<input type="file" id="myfile" name="myfile" accept=".jpg, .png" required>
+					<input type="file" id="myfile" name="myfile" accept="jpg, png" required>
 					<p>jpg, png : 4mo max</p>
 				</div>
 				<div class="form-sous-photo">

@@ -234,7 +234,6 @@ const ouvrirModale = function (e) {
     cible.removeAttribute("aria-hidden");
     cible.setAttribute("aria-model", "true");
     modale = cible;
-    ouvrirModale2;
     modale.addEventListener("click", fermerModale);
     modale.querySelector(".js-fermer-modale").addEventListener("click", fermerModale);
     modale.querySelector(".js-stop-modale").addEventListener("click", stopPropagation);    
@@ -298,14 +297,22 @@ const cible2 = document.getElementById("modale2");
 
 const ouvrirModale2 = function (e) {
     e.preventDefault();
-    fermerModale;
+    modale.style.display = "none";
+    modale.setAttribute("aria-hidden", "true");
+    modale.removeAttribute("aria-model");
     cible2.style.display = null;
     cible2.removeAttribute("aria-hidden");
     cible2.setAttribute("aria-model", "true");
     modale2 = cible2;
     modale2.addEventListener("click", fermerModale2);
     modale2.querySelector(".js-fermer-modale2").addEventListener("click", fermerModale2);
-    modale2.querySelector(".js-retour").addEventListener("click", ouvrirModale, fermerModale2);
+    modale2.querySelector(".js-retour").addEventListener("click", function (e){
+        e.preventDefault();
+        modale2.style.display = "none";
+        modale2.setAttribute("aria-hidden", "true");
+        modale2.removeAttribute("aria-model");
+        ouvrirModale;
+    });
     modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);    
 }
 
@@ -317,6 +324,7 @@ const fermerModale2 = function (e) {
     modale2.removeAttribute("aria-model");
     modale2.removeEventListener("click", fermerModale2);
     modale2.querySelector(".js-fermer-modale2").removeEventListener("click", fermerModale2);
+    modale2.querySelector(".js-retour").removeEventListener("click", fermerModale2);
     modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);
     modale2 = null;
 }
@@ -324,3 +332,43 @@ const fermerModale2 = function (e) {
 document.querySelectorAll(".js-modale2").forEach(a => {
     a.addEventListener("click", ouvrirModale2)
 })
+
+document.getElementById("myfile").addEventListener("change", function (){
+     const fichierTelecharge = document.getElementById("myfile").files[0];
+  if (fichierTelecharge.length === 0) {
+    alert("Veuillez choisir un fichier")
+  } else {
+        function recupExtension(chemin){
+        let regex = /[^.]*$/i;
+        let resultats = chemin.match(regex);
+        return resultats[0];
+    }
+        if (recupExtension(fichierTelecharge.name) == "png" || recupExtension(fichierTelecharge.name) == "jpg") {
+        if (fichierTelecharge.size < 32000000) {
+            
+            const image = document.createElement('img');
+            image.src = URL.createObjectURL(fichierTelecharge);
+            let styleImage = {
+                "max-width": "100%",
+                "min-width": "100%"
+            }
+            Object.assign(image.style, styleImage);
+            document.getElementById("ajout-image").getElementsByTagName("i")[0].setAttribute("style", "display: none");
+            document.getElementById("ajout-image").getElementsByTagName("label")[0].setAttribute("style", "display: none");
+            document.getElementById("ajout-image").getElementsByTagName("input")[0].setAttribute("style", "display: none");
+            document.getElementById("ajout-image").getElementsByTagName("p")[0].setAttribute("style", "display: none");
+            document.getElementById("ajout-image").appendChild(image);
+            
+        } else {
+            alert("Erreur : Le fichier est trop volumineux")
+        }
+    } else {
+      alert("Erreur : Seuls les formats .jpg et .png sont valides");
+    }
+  }
+});
+
+/*
+modale2.querySelector(".js-fermer-modale2").addEventListener("click", fermerModale2);
+modale2.querySelector(".js-retour").removeEventListener("click", fermerModale2);)
+*/
