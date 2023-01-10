@@ -51,15 +51,16 @@
 		<div id="fenetre-modale2" class="js-stop-modale2">
 			<div id="retourfermer">
 				<a href="#modale" class="js-modale">
-					<button class="js-retour"><i class="fa-light fa-arrow-left fa-2xl"></i></button>
+					<button class="js-retour"><i class="fa-solid fa-arrow-left fa-2xl"></i></button>
 				</a>
 				<button class="js-fermer-modale2"><i class="fa-solid fa-xmark fa-2xl"></i></button>
 			</div>
 			<p id="modale-titre2">Ajout photo</p>
 			<form id="ajout-photo">
 				<div id="ajout-image">
-					<i class="fa-thin fa-image-landscape"></i>
-					<input type="file" id="myfile" name="myfile" accept=".jpg, .png" value="+ Ajouter photo" required>
+					<i class="fa-regular fa-image fa-4x"></i>
+					<label for="myfile" id="bouton-ajout">+ Ajouter photo</label>
+					<input type="file" id="myfile" name="myfile" accept=".jpg, .png" required>
 					<p>jpg, png : 4mo max</p>
 				</div>
 				<div class="form-sous-photo">
@@ -67,14 +68,15 @@
 					<input type="text" name="titre" id="titre" required><br/>
 					<label for="categorie">Catégorie</label><br/>
 					<select name="categorie" id="categorie">
+						<option value="Vide"></option>
 						<option value="Objets">Objets</option>
 						<option value="Appartements">Appartements</option>
 						<option value="Hotels & restaurants">Hotels & restaurants</option>
 					</select>
-					<a href="#modale3" class="js-modale3">
-						<p id="valider">Valider</p>
-					</a>
-				</div>
+				</div>	
+				<a href="#modale3" class="js-modale3">
+					<p id="valider">Valider</p>
+				</a>
 			</form>
 	</aside>
 	<main>

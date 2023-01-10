@@ -325,7 +325,7 @@ header i, main i {
 
 #fenetre-modale, #fenetre-modale2 {
 	background-color: #FFFFFF;
-	width: 50%;
+	width: 70%;
 	position: relative;
 	border-radius: 10px;
 	display: flex;
@@ -400,7 +400,6 @@ header i, main i {
 	text-align: center;
 	border: none;
 	background-color: #FFFFFF;
-	border-bottom: 50px;
 }
 
 #suppression-galerie:hover {
@@ -450,12 +449,16 @@ header i, main i {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	background-color: #E8F1F7;
+	border-radius: 3px;
+	height: 170px;
+	width: 100%;
 }
 
 #retourfermer {
 	display: flex;
 	justify-content: space-between;
-	width: 85%;
+	width: 90%;
 	padding: 32px 36px 0 36px;
 }
 
@@ -464,20 +467,64 @@ header i, main i {
 	border: none;
 }
 
-.js-retour i {
+.js-retour {
 	background-color: #FFFFFF;
 	border: none;
-	color: #000000;
 }
 
 #modale-titre2 {
+	text-align: center;
+	margin: 20px;
+	font-size: 26px;
+}
+
+#ajout-photo {
+	width: 70%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
+.fa-image {
+	color: #B9C5CC;
+	line-height: normal;
+	margin-top: 28px;
+	font-size: 50px;
+}
+
+#bouton-ajout {
+	font-family: 'Work Sans';
+	font-weight: 500;
+	color: #306685;
+	background-color: #CBD6DC;
+	text-align: center;
+	border-radius: 50px;
+	font-size: 14px;
+	padding: 10px 30px;
+	margin-top: 20px;
+}
+
+#myfile {
+	opacity: 0;
+	margin: 0;
+	font-size: 2px;
+}
+
+#ajout-image p {
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 10px;
+	line-height: 12px;
+	text-align: center;
+	color: #444444;
+	}
+
 .form-sous-photo {
 	margin: 20px 0 20px 0;
+	border-bottom: 1px solid #B3B3B3;
+	padding-bottom: 50px;
+	width: 100%;
 }
 
 .form-sous-photo input, .form-sous-photo select {
@@ -485,21 +532,25 @@ header i, main i {
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	width: 100%;
 	margin: 10px 0 10px 0;
 	padding: 0;
-}
-
-.form-sous-photo input {
-	text-align: center;
+	width: 100%;
 }
 
 .form-sous-photo label {
 	margin: 20px 0 10px 0;
 }
 
-#modale-titre2 {
+#valider {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #A7A7A7;
 	text-align: center;
-	margin: 20px;
-	font-size: 26px;
+	border-radius: 60px;
+	font-size: 14px;
+	margin-top: 30px;
+	margin-bottom: 55px;
+	padding: 10px 50px;
+	width: 50%;
 }
