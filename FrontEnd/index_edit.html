@@ -56,7 +56,7 @@
 				<button class="js-fermer-modale2"><i class="fa-solid fa-xmark fa-2xl"></i></button>
 			</div>
 			<p id="modale-titre2">Ajout photo</p>
-			<form id="ajout-photo" enctype="multipart/form-data" method="post">
+			<form action="index_edit.html" id="ajout-photo" enctype="multipart/form-data" method="post">
 				<div id="ajout-image">
 					<i class="fa-regular fa-image fa-4x"></i>
 					<label for="myfile" id="bouton-ajout">+ Ajouter photo</label>
@@ -64,18 +64,22 @@
 					<p>jpg, png : 4mo max</p>
 				</div>
 				<div class="form-sous-photo">
-					<label for="titre">Titre</label><br/>
-					<input type="text" name="titre" id="titrePhoto" required><br/>
-					<label for="categorie">Catégorie</label><br/>
-					<select name="categorie" id="categoriePhoto">
-						<option value="vide"></option>
+					<label for="titre-photo">Titre</label><br/>
+					<input type="text" name="titre" id="titre-photo" required><br/>
+					<label for="categorie-photo">Catégorie</label><br/>
+					<select name="categorie" id="categorie-photo">
+						<option value=""></option>
 						<option value="1">Objets</option>
 						<option value="2">Appartements</option>
 						<option value="3">Hotels & restaurants</option>
 					</select>
+					<div id="alertes-erreurs">
+						<p></p>
+					</div>
 				</div>	
-				<input type="submit" id="valider" value="Valider">
+				<button type="button" id="valider" value="Valider">Valider</button>
 			</form>
+		</div>
 	</aside>
 	<main>
 		<section id="introduction">

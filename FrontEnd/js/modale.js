@@ -107,8 +107,6 @@ fetch("http://localhost:5678/api/works")
         divGalerieModale.querySelector("div:last-child").id = "move";
         afficheFiltres();
         supprimerTravail();
-        telechargerPhoto();
-        annuleTelechargementPhoto();
     })
 
     .catch(function (err) {
@@ -249,7 +247,7 @@ const fermerModale = function (e) {
     modale.removeAttribute("aria-model");
     modale.removeEventListener("click", fermerModale);
     modale.querySelector(".js-fermer-modale").removeEventListener("click", fermerModale);
-    modale.querySelector(".js-stop-modale").addEventListener("click", stopPropagation);
+    modale.querySelector(".js-stop-modale").removeEventListener("click", stopPropagation);
     modale = null;
 }
 
@@ -274,21 +272,29 @@ function supprimerTravail() {
             method: "DELETE",
             headers: {
                 'Accept': '/',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY3MzI5MzI0NCwiZXhwIjoxNjczMzc5NjQ0fQ.WNpy5cwnORBXbUX2IKqJ4-mGdE3fez8L5sMSfAoFi5M'
+                'Authorization': `Bearer ${sessionStorage.getItem("token")}`
         }})
         .then(function (res) {
             if (res.ok) {
-                alert("Le travail a bien été supprimé");
-                const idGaleriePoubelle = "galerie" + idPoubelle;
-                const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
-                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
-                divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
+                let confirmation = confirm("Voulez-vous vraiment supprimer ce travail ?");
+      
+                    if(confirmation)  {
+                        alert("Le travail a bien été supprimé");
+                        const idGaleriePoubelle = "galerie" + idPoubelle;
+                        const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
+                        divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                        divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
+                    } else {
+                        alert("Aucun travail n'a été supprimé");
+                    }
+               }
+                
             }
-        })
+        )
         
         .catch(function (err) {
             // Une erreur est survenue
-            alert("Erreur dans la suppression du travail");
+            alert(`Erreur ${err}`);
         });
 })
     })
@@ -308,14 +314,22 @@ const ouvrirModale2 = function (e) {
     modale2 = cible2;
     modale2.addEventListener("click", fermerModale2);
     modale2.querySelector(".js-fermer-modale2").addEventListener("click", fermerModale2);
-    modale2.querySelector(".js-retour").addEventListener("click", function (e){
+    modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);
+    modale2.querySelector(".js-retour").addEventListener("click", function (){
+        if (modale2 === null) return;
         e.preventDefault();
         modale2.style.display = "none";
         modale2.setAttribute("aria-hidden", "true");
         modale2.removeAttribute("aria-model");
+        modale2.removeEventListener("click", fermerModale2);
+        modale2.querySelector(".js-fermer-modale2").removeEventListener("click", fermerModale2);
+        modale2.querySelector(".js-retour").removeEventListener("click", fermerModale2);
+        modale2.querySelector(".js-stop-modale2").removeEventListener("click", stopPropagation);
+        modale2 = null;
+        annuleTelechargementPhoto();
+        document.querySelector("#alertes-erreurs > p").innerText = "";
         ouvrirModale;
     });
-    modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);    
 }
 
 const fermerModale2 = function (e) {
@@ -327,101 +341,131 @@ const fermerModale2 = function (e) {
     modale2.removeEventListener("click", fermerModale2);
     modale2.querySelector(".js-fermer-modale2").removeEventListener("click", fermerModale2);
     modale2.querySelector(".js-retour").removeEventListener("click", fermerModale2);
-    modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);
+    modale2.querySelector(".js-stop-modale2").removeEventListener("click", stopPropagation);
     modale2 = null;
+    annuleTelechargementPhoto();
+    document.querySelector("#alertes-erreurs > p").innerText = "";
 }
 
-document.querySelectorAll(".js-modale2").forEach(a => {
-    a.addEventListener("click", ouvrirModale2)
-})
+document.querySelector(".js-modale2").addEventListener("click", ouvrirModale2);
 
 
+function recupExtension(chemin){
+    let regex = /[^.]*$/i;
+    let resultats = chemin.match(regex);
+    return resultats[0];
+}
 
+let imageTelechargee = {
+    
+}
 
-function telechargerPhoto(){
-document.getElementById("myfile").addEventListener("change", function (){
-     const fichierTelecharge = document.getElementById("myfile").files[0];
-  if (fichierTelecharge.length === 0) {
-    alert("Veuillez choisir un fichier")
-  } else {
-        function recupExtension(chemin){
-        let regex = /[^.]*$/i;
-        let resultats = chemin.match(regex);
-        return resultats[0];
-    }
-        if (recupExtension(fichierTelecharge.name) == "png" || recupExtension(fichierTelecharge.name) == "jpg") {
-        if (fichierTelecharge.size < 32000000) {
+    document.getElementById("myfile").addEventListener("change", function () {
+        
+        document.querySelector("#alertes-erreurs > p").innerText = "";
+
+            const fichierTelecharge = document.getElementById("myfile").files[0];
             
-            const image = document.createElement('img');
-            image.id = "imageTelechargee"
-            image.src = URL.createObjectURL(fichierTelecharge);
-            let styleImage = {
-                "max-width": "100%",
-                "min-width": "100%"
+            if (recupExtension(fichierTelecharge.name) == "png" || recupExtension(fichierTelecharge.name) == "jpg") {
+                if (fichierTelecharge.size < 4194305) {
+                    
+                    const image = document.createElement('img');
+                    image.id = "image-telechargee";
+                    image.src = URL.createObjectURL(fichierTelecharge);
+                    image.style = "max-height: 100%";
+                    document.getElementById("ajout-image").getElementsByTagName("i")[0].setAttribute("style", "display: none");
+                    document.getElementById("ajout-image").getElementsByTagName("label")[0].setAttribute("style", "display: none");
+                    document.getElementById("ajout-image").getElementsByTagName("input")[0].setAttribute("style", "display: none");
+                    document.getElementById("ajout-image").getElementsByTagName("p")[0].setAttribute("style", "display: none");
+                    imageTelechargee = {
+                        "image": "@" + fichierTelecharge.name,
+                        "type": fichierTelecharge.type
+                    }
+                    return document.getElementById("ajout-image").appendChild(image).setAttribute("crossorigin", "");
+
+
+                } else {
+                    document.querySelector("#alertes-erreurs > p").innerText = "Erreur : Le fichier est trop volumineux";
+                }
+            } else {
+                document.querySelector("#alertes-erreurs > p").innerText = "Erreur : Seuls les formats .jpg et .png sont valides";
             }
-            Object.assign(image.style, styleImage);
-            document.getElementById("ajout-image").getElementsByTagName("i")[0].setAttribute("style", "display: none");
-            document.getElementById("ajout-image").getElementsByTagName("label")[0].setAttribute("style", "display: none");
-            document.getElementById("ajout-image").getElementsByTagName("input")[0].setAttribute("style", "display: none");
-            document.getElementById("ajout-image").getElementsByTagName("p")[0].setAttribute("style", "display: none");
-            document.getElementById("ajout-image").appendChild(image);
-            
-        } else {
-            alert("Erreur : Le fichier est trop volumineux")
-        }
+        
+    });
+    
+
+
+function annuleTelechargementPhoto() { //efface la photo téléchargée
+    if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) {
+        document.getElementById("ajout-image").getElementsByTagName("i")[0].removeAttribute("style", "display: none");
+        document.getElementById("ajout-image").getElementsByTagName("label")[0].removeAttribute("style", "display: none");
+        document.getElementById("ajout-image").getElementsByTagName("input")[0].removeAttribute("style", "display: none");
+        document.getElementById("ajout-image").getElementsByTagName("p")[0].removeAttribute("style", "display: none");
+        document.getElementById("ajout-image").removeChild(document.getElementById("image-telechargee"));
     } else {
-      alert("Erreur : Seuls les formats .jpg et .png sont valides");
+        return null;
     }
-  }
-});
-}
-
-document.querySelector(".js-fermer-modale2").addEventListener("click", annuleTelechargementPhoto);
-document.querySelector(".js-retour").addEventListener("click", annuleTelechargementPhoto);
-
-function annuleTelechargementPhoto (){
-    if(document.getElementById("imageTelechargee") === document.getElementById("ajout-image").lastChild){
-    document.getElementById("ajout-image").getElementsByTagName("i")[0].removeAttribute("style", "display: none");
-    document.getElementById("ajout-image").getElementsByTagName("label")[0].removeAttribute("style", "display: none");
-    document.getElementById("ajout-image").getElementsByTagName("input")[0].removeAttribute("style", "display: none");
-    document.getElementById("ajout-image").getElementsByTagName("p")[0].removeAttribute("style", "display: none");
-    document.getElementById("ajout-image").removeChild(document.getElementById("imageTelechargee"));
-    } else { return null;}
 };
 
-/*
 
-function recupDonneesPhoto (){
-    validerFormulaire();
-    let formElement = document.getElementById("ajout-photo");
-    formElement.addEventListener("submit", function(e) {
-    let formData = new FormData();
-
-    formData.append()
-
-    let request = new XMLHttpRequest();
-    request.open("POST", "submitform.php");
-    request.send(new FormData(formElement));
-    }
-    
-    
-    )
-
-}
-
-function validerFormulaire() {
-    
-    if (document.getElementById("imageTelechargee") === document.getElementById("ajout-image").lastChild) {
-        if (document.getElementById("categorie").value != "") {
-            document.getElementById("ajout-photo").removeAttribute("disabled");
-            document.getElementById("valider").onmouseover = function () {
-                this.style.cursor = "pointer";
-            }
-            document.getElementById("valider").onmouseout = function () {
-                this.style.cursor = "auto";
-            }
+document.getElementById("valider").addEventListener("click", function valider() {
+    if (validerFormulaire()) {
+        let formData = new FormData();
+        formData.append("image", "image=" + imageTelechargee.image + ";type=" + imageTelechargee.type);
+        formData.append("title", "title=" + document.getElementById("titre-photo").value);
+        formData.append("category", "category=" + document.getElementById("categorie-photo").value);
+        for (let key of formData.entries()) {
+            console.log(key)
         }
-    } else return null;
-}
+        fetch('http://localhost:5678/api/works', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
+                'Content-Type': "multipart/form-data"
+            }, 
+            body: formData,
+        }) 
+        .then(function (res) {
+            if (res.ok) {
+                return res.json();
+            }
+        })
+        .then(function (value) {
+            console.log(value);
+        })
+        .catch(function (err) {
+            // Une erreur est survenue
+            console.log(err);
+        });
+    } else {
+        return null;
+    }
+});
 
-*/
+
+function validerFormulaire(){ //valide ou non les éléments du formulaire en retournant true ou false
+        let formulaire = false;
+        let valeur = document.getElementById("titre-photo").value;
+        valeur = valeur.trim(); // enlève espaces avant et après string
+        if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) { //image présente ?
+            if (valeur.length > 0) {
+                if (document.getElementById("categorie-photo").value != "") { //catégorie choisie ?
+                    formulaire = true;
+                } else {
+                    document.querySelector("#alertes-erreurs > p").innerText = "Veuillez choisir une catégorie";
+                    formulaire = false;
+                }
+            } else {
+                document.querySelector("#alertes-erreurs > p").innerText = "Veuillez renseigner un titre";
+                formulaire = false;
+            }
+        } else {
+            document.querySelector("#alertes-erreurs > p").innerText = "Veuillez choisir une photo";
+            formulaire = false;
+        }
+        return formulaire;
+    };
+    
+
+
