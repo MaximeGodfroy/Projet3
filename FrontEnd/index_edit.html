@@ -34,23 +34,57 @@
 			</nav>
 		</div>
 	</header>
-	<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre" style="display: none">
+	<aside id="modale" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre"
+		style="display: none">
 		<div id="fenetre-modale" class="js-stop-modale">
 			<button class="js-fermer-modale"><i class="fa-solid fa-xmark fa-2xl"></i></button>
 			<p id="modale-titre">Galerie photo</p>
 			<div id="galerie-modale"></div>
-			<a href="#modale2" class="js-modale"><p id="ajouter-photo">Ajouter une photo</p></a>
+			<a href="#modale2" class="js-modale2">
+				<p id="ajouter-photo">Ajouter une photo</p>
+			</a>
 			<button id="suppression-galerie">Supprimer la galerie</button>
 		</div>
 	</aside>
-	<aside id="modale2" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre" style="display: none">
-		
+	<aside id="modale2" class="modale" aria-hidden="true" role="dialog" aria-labelledby="modale-titre2"
+		style="display: none">
+		<div id="fenetre-modale2" class="js-stop-modale2">
+			<div id="retourfermer">
+				<button class="js-retour"><i class="fa-solid fa-arrow-left fa-2xl"></i></button>
+				<button class="js-fermer-modale2"><i class="fa-solid fa-xmark fa-2xl"></i></button>
+			</div>
+			<p id="modale-titre2">Ajout photo</p>
+			<form action="index_edit.html" id="ajout-photo" enctype="multipart/form-data" method="post">
+				<div id="ajout-image">
+					<i class="fa-regular fa-image fa-4x"></i>
+					<label for="myfile" id="bouton-ajout">+ Ajouter photo</label>
+					<input type="file" id="myfile" name="myfile" accept="jpg, png" required>
+					<p>jpg, png : 4mo max</p>
+				</div>
+				<div class="form-sous-photo">
+					<label for="titre-photo">Titre</label><br/>
+					<input type="text" name="titre" id="titre-photo" required><br/>
+					<label for="categorie-photo">Catégorie</label><br/>
+					<select name="categorie" id="categorie-photo">
+						<option value=""></option>
+						<option value="1">Objets</option>
+						<option value="2">Appartements</option>
+						<option value="3">Hotels & restaurants</option>
+					</select>
+					<div id="alertes-erreurs">
+						<p></p>
+					</div>
+				</div>	
+				<button type="button" id="valider" value="Valider">Valider</button>
+			</form>
+		</div>
 	</aside>
 	<main>
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
-				<figcaption><a href="#modale" class="js-modale"><i class="fa-regular fa-pen-to-square"></i>modifier</a></figcaption>
+				<figcaption><a href="#modale" class="js-modale"><i class="fa-regular fa-pen-to-square"></i>modifier</a>
+				</figcaption>
 			</figure>
 			<article>
 				<a href="#modale" class="js-modale">

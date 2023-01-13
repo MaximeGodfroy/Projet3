@@ -8,8 +8,9 @@ class Works{
     }
 }
 
-class WorksModale{
-    constructor(jsonWorksModale){
-        jsonWorksModale && Object.assign(this, jsonWorksModale);
+class Categories{
+    constructor(jsonCategories){
+        jsonCategories && Object.assign(this, jsonCategories);
     }
 }
+
