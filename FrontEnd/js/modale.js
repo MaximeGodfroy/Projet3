@@ -433,7 +433,7 @@ function recupNomCategorie(id) {
     });
     
 
-
+iconePoubelle = `<i class="fa-regular fa-trash-can fa-2xs"></i>`
 
 document.getElementById("valider").addEventListener("click", function valider() {
     if (validerFormulaire()) {
@@ -451,6 +451,7 @@ document.getElementById("valider").addEventListener("click", function valider() 
         }) 
         .then(function (res) {
             if (res.ok) {
+                alert("Votre travail a bien été ajouté");
                 return res.json();
             }
         })
@@ -464,9 +465,6 @@ document.getElementById("valider").addEventListener("click", function valider() 
             divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
             divGallery.querySelector("figure:last-child figcaption").append(work.title);
             divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
-            divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('div')).setAttribute("class", "poubelles");
-            divGalerieModale.querySelector("div:last-child").setAttribute("id", "poubelle" + work.id);
-            divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-regular fa-trash-can fa-2xs");
             divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
             divGalerieModale.querySelector("figure:last-child").setAttribute("id", "galerie-modale" + work.id);
             divGalerieModale.querySelector("figure:last-child").setAttribute("class", nomCategorie);
