@@ -93,7 +93,6 @@ fetch("http://localhost:5678/api/works")
             divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('div')).setAttribute("class", "poubelles");
             divGalerieModale.querySelector("div:last-child").setAttribute("id", "poubelle" + work.id);
             divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-regular fa-trash-can fa-2xs");
-            divGalerieModale.querySelector("figure:last-child i").setAttribute("style", "color: #FFFFFF");
             divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
             divGalerieModale.querySelector("figure:last-child").setAttribute("id", "galerie-modale" + work.id);
             divGalerieModale.querySelector("figure:last-child").setAttribute("class", work.category.name);
@@ -264,39 +263,37 @@ function supprimerTravail() {
     const worksModale = divGalerieModale.innerHTML;
     document.querySelectorAll(".poubelles").forEach(poubelle => {
         poubelle.addEventListener('click', function () {
-        divGallery.innerHTML = allWorks;
-        divGalerieModale.innerHTML = worksModale;
-        const idPoubelle = poubelle.id.split("poubelle")[1];
-        const url = "http://localhost:5678/api/works/" + idPoubelle;
-        fetch(url, {
-            method: "DELETE",
-            headers: {
-                'Accept': '/',
-                'Authorization': `Bearer ${sessionStorage.getItem("token")}`
-        }})
-        .then(function (res) {
-            if (res.ok) {
-                let confirmation = confirm("Voulez-vous vraiment supprimer ce travail ?");
-      
-                    if(confirmation)  {
-                        alert("Le travail a bien été supprimé");
-                        const idGaleriePoubelle = "galerie" + idPoubelle;
-                        const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
-                        divGallery.removeChild(document.getElementById(idGaleriePoubelle));
-                        divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
-                    } else {
-                        alert("Aucun travail n'a été supprimé");
+            let confirmation = confirm("Voulez-vous vraiment supprimer ce travail ?");
+            if (confirmation) {
+                divGallery.innerHTML = allWorks;
+                divGalerieModale.innerHTML = worksModale;
+                const idPoubelle = poubelle.id.split("poubelle")[1];
+                const url = "http://localhost:5678/api/works/" + idPoubelle;
+                fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                        'Accept': '/',
+                        'Authorization': `Bearer ${sessionStorage.getItem("token")}`
                     }
-               }
-                
+                })
+                    .then(function (res) {
+                        if (res.ok) {
+                            alert("Le travail a bien été supprimé");
+                            const idGaleriePoubelle = "galerie" + idPoubelle;
+                            const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
+                            divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                            divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
+                        }
+                    }
+                    )
+                    .catch(function (err) {
+                        // Une erreur est survenue
+                        alert(`Erreur ${err}`);
+                    });
+            } else {
+                alert("Aucun travail n'a été supprimé");
             }
-        )
-        
-        .catch(function (err) {
-            // Une erreur est survenue
-            alert(`Erreur ${err}`);
-        });
-})
+        })
     })
 }
 
@@ -314,8 +311,7 @@ const ouvrirModale2 = function (e) {
     modale2 = cible2;
     modale2.addEventListener("click", fermerModale2);
     modale2.querySelector(".js-fermer-modale2").addEventListener("click", fermerModale2);
-    modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);
-    modale2.querySelector(".js-retour").addEventListener("click", function (){
+    modale2.querySelector(".js-retour").addEventListener("click", function () {
         if (modale2 === null) return;
         e.preventDefault();
         modale2.style.display = "none";
@@ -328,8 +324,16 @@ const ouvrirModale2 = function (e) {
         modale2 = null;
         annuleTelechargementPhoto();
         document.querySelector("#alertes-erreurs > p").innerText = "";
-        ouvrirModale;
+        cible.style.display = null;
+        cible.removeAttribute("aria-hidden");
+        cible.setAttribute("aria-model", "true");
+        modale = cible;
+        modale.addEventListener("click", fermerModale);
+        modale.querySelector(".js-fermer-modale").addEventListener("click", fermerModale);
+        modale.querySelector(".js-stop-modale").addEventListener("click", stopPropagation);
     });
+    modale2.querySelector(".js-stop-modale2").addEventListener("click", stopPropagation);
+
 }
 
 const fermerModale2 = function (e) {
@@ -356,9 +360,7 @@ function recupExtension(chemin){
     return resultats[0];
 }
 
-let imageTelechargee = {
-    
-}
+let imageTelechargee = "";
 
     document.getElementById("myfile").addEventListener("change", function () {
         
@@ -377,10 +379,7 @@ let imageTelechargee = {
                     document.getElementById("ajout-image").getElementsByTagName("label")[0].setAttribute("style", "display: none");
                     document.getElementById("ajout-image").getElementsByTagName("input")[0].setAttribute("style", "display: none");
                     document.getElementById("ajout-image").getElementsByTagName("p")[0].setAttribute("style", "display: none");
-                    imageTelechargee = {
-                        "image": "@" + fichierTelecharge.name,
-                        "type": fichierTelecharge.type
-                    }
+                    imageTelechargee = fichierTelecharge;
                     return document.getElementById("ajout-image").appendChild(image).setAttribute("crossorigin", "");
 
 
@@ -402,27 +401,51 @@ function annuleTelechargementPhoto() { //efface la photo téléchargée
         document.getElementById("ajout-image").getElementsByTagName("input")[0].removeAttribute("style", "display: none");
         document.getElementById("ajout-image").getElementsByTagName("p")[0].removeAttribute("style", "display: none");
         document.getElementById("ajout-image").removeChild(document.getElementById("image-telechargee"));
+        document.getElementById("titre-photo").value = "";
+        document.getElementById("categorie-photo").value = "";
     } else {
         return null;
     }
 };
 
+let tableauNomCategorie = [];
+
+function recupNomCategorie(id) {
+    id = id - 1;
+    return tableauNomCategorie[id];
+}
+
+    fetch("http://localhost:5678/api/categories")
+    .then(function(res){
+        if (res.ok){
+            return res.json();
+        }
+    })
+    .then(function (jsonlisteCategories){
+        for (let listeCategories of jsonlisteCategories){
+            let categories = new Categories(listeCategories);
+            tableauNomCategorie.push(categories.name);
+        }
+        recupNomCategorie();
+    })
+    .catch(function (err){
+        console.log(err);
+    });
+    
+
+
 
 document.getElementById("valider").addEventListener("click", function valider() {
     if (validerFormulaire()) {
+        let nomCategorie = recupNomCategorie(document.getElementById("categorie-photo").value);
         let formData = new FormData();
-        formData.append("image", "image=" + imageTelechargee.image + ";type=" + imageTelechargee.type);
-        formData.append("title", "title=" + document.getElementById("titre-photo").value);
-        formData.append("category", "category=" + document.getElementById("categorie-photo").value);
-        for (let key of formData.entries()) {
-            console.log(key)
-        }
+        formData.append("image", imageTelechargee);
+        formData.append("title", document.getElementById("titre-photo").value);
+        formData.append("category", document.getElementById("categorie-photo").value);
         fetch('http://localhost:5678/api/works', {
             method: 'POST',
             headers: {
-                'accept': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
-                'Content-Type': "multipart/form-data"
+                'Authorization': `Bearer ${sessionStorage.getItem("token")}`
             }, 
             body: formData,
         }) 
@@ -431,8 +454,36 @@ document.getElementById("valider").addEventListener("click", function valider() 
                 return res.json();
             }
         })
-        .then(function (value) {
-            console.log(value);
+        .then(function (work) {
+            divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+            divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+            divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+            divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+            divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+            divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+            divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+            divGallery.querySelector("figure:last-child figcaption").append(work.title);
+            divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+            divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('div')).setAttribute("class", "poubelles");
+            divGalerieModale.querySelector("div:last-child").setAttribute("id", "poubelle" + work.id);
+            divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-regular fa-trash-can fa-2xs");
+            divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+            divGalerieModale.querySelector("figure:last-child").setAttribute("id", "galerie-modale" + work.id);
+            divGalerieModale.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+            divGalerieModale.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+            divGalerieModale.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+            divGalerieModale.querySelector("figure:last-child img").setAttribute("alt", work.title);
+            divGalerieModale.querySelector("figure:last-child figcaption").append("éditer");
+            if (modale2 === null) return;
+            modale2.style.display = "none";
+            modale2.setAttribute("aria-hidden", "true");
+            modale2.removeAttribute("aria-model");
+            modale2.removeEventListener("click", fermerModale2);
+            modale2.querySelector(".js-fermer-modale2").removeEventListener("click", fermerModale2);
+            modale2.querySelector(".js-retour").removeEventListener("click", fermerModale2);
+            modale2.querySelector(".js-stop-modale2").removeEventListener("click", stopPropagation);
+            modale2 = null;
+            document.querySelector("#alertes-erreurs > p").innerText = "";
         })
         .catch(function (err) {
             // Une erreur est survenue
