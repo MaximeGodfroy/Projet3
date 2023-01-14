@@ -4,6 +4,28 @@ document.querySelector(".gallery").innerHTML = "";
 const sectionPortfolio = document.getElementById('portfolio');
 const divGallery = document.querySelector(".gallery");
 
+// Requête fetch pour récupérer l'ensemble des travaux
+
+fetch("http://localhost:5678/api/works")
+    .then(data => data.json())
+    .then(jsonListWorks => {
+        for (let jsonWorks of jsonListWorks) {
+            let work = new Works(jsonWorks);
+            divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+            divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+            divGallery.querySelector("figure:last-child").setAttribute("id", work.id);
+            divGallery.querySelector("figure:last-child").setAttribute("class", work.category.name);
+            divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+            divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+            divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+            divGallery.querySelector("figure:last-child figcaption").append(work.title);
+        } afficheFiltres();
+    })
+
+    .catch(function (err) {
+        // Une erreur est survenue
+});
+
 // Création du menu filtres avec createElement et appendChild
 
 const createFiltres = document.createElement("div");
@@ -73,29 +95,6 @@ let styleFiltreInactif = {
     "backgroundColor": "#FFFFFF"
 }
 
-// Requête fetch pour récupérer l'ensemble des travaux
-
-fetch("http://localhost:5678/api/works")
-    .then(data => data.json())
-    .then(jsonListWorks => {
-        for (let jsonWorks of jsonListWorks) {
-            let work = new Works(jsonWorks);
-            divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
-            divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
-            divGallery.querySelector("figure:last-child").setAttribute("id", work.id);
-            divGallery.querySelector("figure:last-child").setAttribute("class", work.category.name);
-            divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
-            divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
-            divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
-            divGallery.querySelector("figure:last-child figcaption").append(work.title);
-        } afficheFiltres();
-    })
-
-    .catch(function (err) {
-        // Une erreur est survenue
-});
-
-
 // Styles de soulignage des filtres au passage de la souris
 
 divObjets.onmouseover = function() 
@@ -138,7 +137,7 @@ divHotels.onmouseout = function()
         this.style.textDecoration = "none";
     }
 
-// Fonction qui filtre les travaux en fonction du filtre cliqué retardée pour que le fetch ait le temps de se charger
+// Fonction qui filtre les travaux en fonction du filtre cliqué appelée après le fetch
 
 function afficheFiltres() {
     const allWorks = divGallery.innerHTML;
