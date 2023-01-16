@@ -6,7 +6,6 @@ document.getElementById("form").addEventListener('submit', async function (e) {
         "email": email.value,
         "password": password.value
     }
-    console.log(user);
     let reponse = "";
     await fetch("http://localhost:5678/api/users/login", {
         method: "POST",
@@ -23,7 +22,6 @@ document.getElementById("form").addEventListener('submit', async function (e) {
             }
         })
         .then(function (value) {
-            console.log(value.token);
             sessionStorage.setItem("token", value.token);
             window.location.assign("index_edit.html");
         })
@@ -31,9 +29,9 @@ document.getElementById("form").addEventListener('submit', async function (e) {
             // Une erreur est survenue
             reponse = false;
         });
-        if (reponse) {
-            alert("Vous êtes bien connecté");
-        } else {
-            alert("Erreur dans l’identifiant ou le mot de passe");
-        }
+    if (reponse) {
+        alert("Vous êtes bien connecté");
+    } else {
+        alert("Erreur dans l’identifiant ou le mot de passe");
+    }
 });
