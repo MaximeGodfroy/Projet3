@@ -138,7 +138,10 @@ fetch("http://localhost:5678/api/categories")
         console.log(err);
     });
 
-// Fonctions qui filtrent les travaux en fonction du filtre cliqué
+// Fonction qui filtre les travaux en fonction du filtre cliqué
+
+let travauxFiltres = "";
+
 function afficheFiltres() {
     document.querySelectorAll(".filtres").forEach(filtre => {
         filtre.addEventListener('click', function () {
@@ -154,16 +157,14 @@ function afficheFiltres() {
             const selectNonFiltres = divGallery.querySelectorAll("figure");
             const monSet = new Set();
             for (let i = 0; i < selectNonFiltres.length; i++) {
-                selectNonFiltres[i].style.display = null;
                 if (selectNonFiltres[i].classList != filtre.innerText) {
                     monSet.add(selectNonFiltres[i].id)
                 }
             }
             for (let item of monSet) {
-                document.getElementById(item).style.display = "none";
+                divGallery.removeChild(document.getElementById(item));
             }
-
-
+            travauxFiltres = divGallery.innerHTML;
         })
     })
 
@@ -173,7 +174,8 @@ function afficheFiltres() {
         for (let i of allCategories) {
             Object.assign(document.getElementById(i.id).style, styleFiltreInactif);
         }
-    })
+    }
+    )
 }
 
 let modale = null;
@@ -227,12 +229,28 @@ function supprimerTravail() {
                 })
                     .then(function (res) {
                         if (res.ok) {
-                            const idGaleriePoubelle = "galerie" + idPoubelle;
                             const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
-                            divGallery.removeChild(document.getElementById(idGaleriePoubelle));
-                            divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
-                            allWorks = divGallery.innerHTML;
-                            alert("Le travail a bien été supprimé");
+                            const idGaleriePoubelle = "galerie" + idPoubelle;
+                            let divGalerieAvantAjout = divGallery.innerHTML;
+                            if(document.querySelector(`#${idGaleriePoubelle}`) === null) { // cas où la photo à supprimer n'apparait pas dans le filtre
+                                divGallery.innerHTML = allWorks;
+                                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                                allWorks = divGallery.innerHTML;
+                                divGallery.innerHTML = travauxFiltres;
+                            } else { 
+                                if(divGalerieAvantAjout !== travauxFiltres) { // Cas où aucun filtre n'est sélectionné (filtre tous)
+                                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                                allWorks = divGallery.innerHTML;
+                            } else { // Cas où le filtre sélectionné contient la photo à supprimer
+                                divGallery.innerHTML = allWorks;
+                                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                                allWorks = divGallery.innerHTML;
+                                divGallery.innerHTML = travauxFiltres;
+                                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                                travauxFiltres = divGallery.innerHTML;
+                            }}
+                                divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
+                                alert("Le travail a bien été supprimé");
                         }
                     }
                     )
@@ -379,22 +397,61 @@ document.getElementById("valider").addEventListener("click", function valider() 
         })
             .then(function (res) {
                 if (res.ok) {
-                    alert("Votre travail a bien été ajouté");
                     return res.json();
                 }
             })
             .then(function (work) {
-                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
-                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
-                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
-                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
-                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
-                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
-                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
-                divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                            if(document.getElementById("tous").style.color === "rgb(255, 255, 255)"){ // Cas où le filtre sélectionné est tous
+                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                                allWorks = divGallery.innerHTML;
+                            } else {
+                                if(document.getElementById(document.getElementById("categorie-photo").value).style.color !== "rgb(255, 255, 255)") { // cas où la photo à ajouter n'apparaitra pas dans le filtre
+                                divGallery.innerHTML = allWorks;
+                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                                allWorks = divGallery.innerHTML;
+                                divGallery.innerHTML = travauxFiltres;
+                            } else { // Cas où le filtre sélectionné contiendra la photo à ajouter
+                                divGallery.innerHTML = allWorks;
+                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                                allWorks = divGallery.innerHTML;
+                                divGallery.innerHTML = travauxFiltres;
+                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                                travauxFiltres = divGallery.innerHTML;
+                            }
+                            }
+                            
                 divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
                 divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
                 divGalerieModale.querySelector("figure:last-child").setAttribute("id", "galerie-modale" + work.id);
+                divGalerieModale.querySelector("div:last-child").appendChild(document.createElement('i')).setAttribute("class", "fa-regular fa-trash-can fa-2xs");
                 divGalerieModale.querySelector("figure:last-child").setAttribute("class", nomCategorie);
                 divGalerieModale.querySelector("figure:last-child img").setAttribute("crossorigin", "");
                 divGalerieModale.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
@@ -417,7 +474,7 @@ document.getElementById("valider").addEventListener("click", function valider() 
                 document.getElementById("ajout-image").removeChild(document.getElementById("image-telechargee"));
                 document.getElementById("titre-photo").value = "";
                 document.getElementById("categorie-photo").value = "";
-                allWorks = divGallery.innerHTML;
+                alert("Votre travail a bien été ajouté");
             })
             .catch(function (err) {
                 // Une erreur est survenue
