@@ -105,9 +105,9 @@ divTous.onmouseout = function () {
     this.style.textDecoration = "none";
 }
 
-let tableauNomCategorie = [];
-
 // Requête fetch pour récupérer toutes les catégories
+
+let tableauNomCategorie = [];
 
 fetch("http://localhost:5678/api/categories")
     .then(function (res) {
@@ -135,7 +135,7 @@ fetch("http://localhost:5678/api/categories")
         afficheFiltres();
     })
     .catch(function (err) {
-        console.log(err);
+        alert("Erreur " + err + "lors de la requête pour obtenir les catégories");
     });
 
 // Fonction qui filtre les travaux en fonction du filtre cliqué
@@ -218,7 +218,7 @@ function supprimerTravail() {
         poubelle.addEventListener('click', function () {
             let confirmation = confirm("Voulez-vous vraiment supprimer ce travail ?");
             if (confirmation) {
-                const idPoubelle = poubelle.id.split("poubelle")[1];
+                const idPoubelle = poubelle.id.split("poubelle")[1]; // on récupère l'id de la poubelle
                 const url = "http://localhost:5678/api/works/" + idPoubelle;
                 fetch(url, {
                     method: "DELETE",
@@ -232,25 +232,26 @@ function supprimerTravail() {
                             const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
                             const idGaleriePoubelle = "galerie" + idPoubelle;
                             let divGalerieAvantAjout = divGallery.innerHTML;
-                            if(document.querySelector(`#${idGaleriePoubelle}`) === null) { // cas où la photo à supprimer n'apparait pas dans le filtre
+                            if (document.querySelector(`#${idGaleriePoubelle}`) === null) { // cas où la photo à supprimer n'apparait pas dans le filtre
                                 divGallery.innerHTML = allWorks;
                                 divGallery.removeChild(document.getElementById(idGaleriePoubelle));
                                 allWorks = divGallery.innerHTML;
                                 divGallery.innerHTML = travauxFiltres;
-                            } else { 
-                                if(divGalerieAvantAjout !== travauxFiltres) { // Cas où aucun filtre n'est sélectionné (filtre tous)
-                                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
-                                allWorks = divGallery.innerHTML;
-                            } else { // Cas où le filtre sélectionné contient la photo à supprimer
-                                divGallery.innerHTML = allWorks;
-                                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
-                                allWorks = divGallery.innerHTML;
-                                divGallery.innerHTML = travauxFiltres;
-                                divGallery.removeChild(document.getElementById(idGaleriePoubelle));
-                                travauxFiltres = divGallery.innerHTML;
-                            }}
-                                divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
-                                alert("Le travail a bien été supprimé");
+                            } else {
+                                if (divGalerieAvantAjout !== travauxFiltres) { // Cas où aucun filtre n'est sélectionné (filtre tous)
+                                    divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                                    allWorks = divGallery.innerHTML;
+                                } else { // Cas où le filtre sélectionné contient la photo à supprimer
+                                    divGallery.innerHTML = allWorks;
+                                    divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                                    allWorks = divGallery.innerHTML;
+                                    divGallery.innerHTML = travauxFiltres;
+                                    divGallery.removeChild(document.getElementById(idGaleriePoubelle));
+                                    travauxFiltres = divGallery.innerHTML;
+                                }
+                            }
+                            divGalerieModale.removeChild(document.getElementById(idGalerieModalePoubelle));
+                            alert("Le travail a bien été supprimé");
                         }
                     }
                     )
@@ -360,9 +361,7 @@ document.getElementById("myfile").addEventListener("change", function () {
 
 });
 
-
-
-function annuleTelechargementPhoto() { //efface la photo téléchargée
+function annuleTelechargementPhoto() { // on vide le formulaire
     if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) {
         document.getElementById("ajout-image").getElementsByTagName("i")[0].removeAttribute("style", "display: none");
         document.getElementById("ajout-image").getElementsByTagName("label")[0].removeAttribute("style", "display: none");
@@ -401,53 +400,52 @@ document.getElementById("valider").addEventListener("click", function valider() 
                 }
             })
             .then(function (work) {
-                            if(document.getElementById("tous").style.color === "rgb(255, 255, 255)"){ // Cas où le filtre sélectionné est tous
-                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
-                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
-                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
-                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
-                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
-                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
-                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
-                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
-                                allWorks = divGallery.innerHTML;
-                            } else {
-                                if(document.getElementById(document.getElementById("categorie-photo").value).style.color !== "rgb(255, 255, 255)") { // cas où la photo à ajouter n'apparaitra pas dans le filtre
-                                divGallery.innerHTML = allWorks;
-                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
-                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
-                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
-                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
-                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
-                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
-                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
-                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
-                                allWorks = divGallery.innerHTML;
-                                divGallery.innerHTML = travauxFiltres;
-                            } else { // Cas où le filtre sélectionné contiendra la photo à ajouter
-                                divGallery.innerHTML = allWorks;
-                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
-                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
-                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
-                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
-                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
-                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
-                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
-                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
-                                allWorks = divGallery.innerHTML;
-                                divGallery.innerHTML = travauxFiltres;
-                                divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
-                                divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
-                                divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
-                                divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
-                                divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
-                                divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
-                                divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
-                                divGallery.querySelector("figure:last-child figcaption").append(work.title);
-                                travauxFiltres = divGallery.innerHTML;
-                            }
-                            }
-                            
+                if (document.getElementById("tous").style.color === "rgb(255, 255, 255)") { // Cas où le filtre sélectionné est tous
+                    divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                    divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                    divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                    divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                    divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                    divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                    divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                    divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                    allWorks = divGallery.innerHTML;
+                } else {
+                    if (document.getElementById(document.getElementById("categorie-photo").value).style.color !== "rgb(255, 255, 255)") { // cas où la photo à ajouter n'apparaitra pas dans le filtre
+                        divGallery.innerHTML = allWorks;
+                        divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                        divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                        divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                        divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                        divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                        divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                        divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                        divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                        allWorks = divGallery.innerHTML;
+                        divGallery.innerHTML = travauxFiltres;
+                    } else { // Cas où le filtre sélectionné contiendra la photo à ajouter
+                        divGallery.innerHTML = allWorks;
+                        divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                        divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                        divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                        divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                        divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                        divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                        divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                        divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                        allWorks = divGallery.innerHTML;
+                        divGallery.innerHTML = travauxFiltres;
+                        divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
+                        divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
+                        divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
+                        divGallery.querySelector("figure:last-child").setAttribute("class", nomCategorie);
+                        divGallery.querySelector("figure:last-child img").setAttribute("crossorigin", "");
+                        divGallery.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
+                        divGallery.querySelector("figure:last-child img").setAttribute("alt", work.title);
+                        divGallery.querySelector("figure:last-child figcaption").append(work.title);
+                        travauxFiltres = divGallery.innerHTML;
+                    }
+                }
                 divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
                 divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
                 divGalerieModale.querySelector("figure:last-child").setAttribute("id", "galerie-modale" + work.id);
@@ -489,7 +487,7 @@ function validerFormulaire() { //valide ou non les éléments du formulaire en r
     let formulaire = false;
     let valeur = document.getElementById("titre-photo").value;
     valeur = valeur.trim(); // enlève espaces avant et après string
-    if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) { //image présente ?
+    if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) { // cherche si l'image est présente dans le formulaire
         if (valeur.length > 0) {
             if (document.getElementById("categorie-photo").value != "") { //catégorie choisie ?
                 formulaire = true;

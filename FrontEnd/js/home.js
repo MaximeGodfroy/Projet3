@@ -26,7 +26,7 @@ fetch("http://localhost:5678/api/works")
 
     .catch(function (err) {
         // Une erreur est survenue
-        alert("Erreur " + err + "lors de la requête");
+        alert("Erreur " + err + "lors de la requête pour récupérer l'ensemble des travaux");
     });
 
 // Création du menu filtres avec createElement et appendChild
@@ -116,7 +116,7 @@ fetch("http://localhost:5678/api/categories")
         afficheFiltres();
     })
     .catch(function (err) {
-        console.log(err);
+        alert("Erreur " + err + "lors de la requête pour obtenir les catégories");
     });
 
 // Fonction qui filtre les travaux en fonction du filtre cliqué
@@ -124,7 +124,7 @@ fetch("http://localhost:5678/api/categories")
 function afficheFiltres() {
     document.querySelectorAll(".filtres").forEach(filtre => {
         filtre.addEventListener('click', function () {
-            divGallery.innerHTML = allWorks;
+            divGallery.innerHTML = allWorks; // à chaque clic sur un filtre, on démarre avec l'ensemble des travaux
             Object.assign(divTous.style, styleFiltreInactif);
             for (let i of allCategories) {
                 if (i.name === filtre.innerText) {
@@ -141,7 +141,7 @@ function afficheFiltres() {
                 }
             }
             for (let item of monSet) {
-                divGallery.removeChild(document.getElementById(item));
+                divGallery.removeChild(document.getElementById(item)); // on supprime tous les travaux qui n'appartiennent pas au filtre sélectionné
             }
 
 
