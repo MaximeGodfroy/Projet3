@@ -1,4 +1,4 @@
-document.getElementById("form").addEventListener('submit', async function (e) {
+document.getElementById("form").addEventListener('submit', function (e) {
     e.preventDefault();
     let email = document.getElementById("email");
     let password = document.getElementById("password");
@@ -7,7 +7,7 @@ document.getElementById("form").addEventListener('submit', async function (e) {
         "password": password.value
     }
     let reponse = "";
-    await fetch("http://localhost:5678/api/users/login", {
+    fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
@@ -17,7 +17,7 @@ document.getElementById("form").addEventListener('submit', async function (e) {
     })
         .then(function (res) {
             if (res.ok) {
-                reponse = true;
+                alert("Vous êtes bien connecté");
                 return res.json();
             }
         })
@@ -27,11 +27,6 @@ document.getElementById("form").addEventListener('submit', async function (e) {
         })
         .catch(function (err) {
             // Une erreur est survenue
-            reponse = false;
+            alert("Erreur dans l’identifiant ou le mot de passe");
         });
-    if (reponse) {
-        alert("Vous êtes bien connecté");
-    } else {
-        alert("Erreur dans l’identifiant ou le mot de passe");
-    }
 });

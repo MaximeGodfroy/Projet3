@@ -146,19 +146,20 @@ function afficheFiltres() {
     document.querySelectorAll(".filtres").forEach(filtre => {
         filtre.addEventListener('click', function () {
             divGallery.innerHTML = allWorks;
-            Object.assign(divTous.style, styleFiltreInactif);
+            Object.assign(divTous.style, styleFiltreInactif); // applique le style filtre inactif au filtre "Tous"
             for (let i of allCategories) {
-                if (i.name === filtre.innerText) {
+                if (i.name === filtre.innerText) { // applique le style filtre actif au filtre sélectionné
                     Object.assign(document.getElementById(i.id).style, styleFiltreActif);
                 } else {
                     Object.assign(document.getElementById(i.id).style, styleFiltreInactif);
                 }
             }
-            const selectNonFiltres = divGallery.querySelectorAll("figure");
+            // récupère un tableau contenant toutes les figures de la galerie
+            const selectNonFiltres = divGallery.querySelectorAll("figure"); 
             const monSet = new Set();
             for (let i = 0; i < selectNonFiltres.length; i++) {
-                if (selectNonFiltres[i].classList != filtre.innerText) {
-                    monSet.add(selectNonFiltres[i].id)
+                if (selectNonFiltres[i].classList != filtre.innerText) { 
+                    monSet.add(selectNonFiltres[i].id) // ajoute au Set les figures à supprimer
                 }
             }
             for (let item of monSet) {
@@ -170,8 +171,9 @@ function afficheFiltres() {
 
     divTous.addEventListener('click', function () {
         divGallery.innerHTML = allWorks;
-        Object.assign(divTous.style, styleFiltreActif);
+        Object.assign(divTous.style, styleFiltreActif); // applique au filtre "Tous" le style filtre actif
         for (let i of allCategories) {
+            // applique le style filtre inactif à tous les autres filtres
             Object.assign(document.getElementById(i.id).style, styleFiltreInactif);
         }
     }
@@ -213,9 +215,8 @@ document.querySelectorAll(".js-modale").forEach(a => {
 })
 
 function supprimerTravail() {
-
     document.querySelectorAll(".poubelles").forEach(poubelle => {
-        poubelle.addEventListener('click', function () {
+        poubelle.addEventListener('click', function () { // écoute le clic sur toutes les icônes poubelle
             let confirmation = confirm("Voulez-vous vraiment supprimer ce travail ?");
             if (confirmation) {
                 const idPoubelle = poubelle.id.split("poubelle")[1]; // on récupère l'id de la poubelle
@@ -232,13 +233,15 @@ function supprimerTravail() {
                             const idGalerieModalePoubelle = "galerie-modale" + idPoubelle;
                             const idGaleriePoubelle = "galerie" + idPoubelle;
                             let divGalerieAvantAjout = divGallery.innerHTML;
-                            if (document.querySelector(`#${idGaleriePoubelle}`) === null) { // cas où la photo à supprimer n'apparait pas dans le filtre
+                            // cas où la photo à supprimer n'apparait pas dans le filtre
+                            if (document.querySelector(`#${idGaleriePoubelle}`) === null) { 
                                 divGallery.innerHTML = allWorks;
                                 divGallery.removeChild(document.getElementById(idGaleriePoubelle));
                                 allWorks = divGallery.innerHTML;
                                 divGallery.innerHTML = travauxFiltres;
                             } else {
-                                if (divGalerieAvantAjout !== travauxFiltres) { // Cas où aucun filtre n'est sélectionné (filtre tous)
+                                // Cas où aucun filtre n'est sélectionné (filtre tous)
+                                if (divGalerieAvantAjout !== travauxFiltres) { 
                                     divGallery.removeChild(document.getElementById(idGaleriePoubelle));
                                     allWorks = divGallery.innerHTML;
                                 } else { // Cas où le filtre sélectionné contient la photo à supprimer
@@ -323,7 +326,7 @@ const fermerModale2 = function (e) {
 document.querySelector(".js-modale2").addEventListener("click", ouvrirModale2);
 
 
-function recupExtension(chemin) {
+function recupExtension(chemin) { // retourne l'extension d'un fichier
     let regex = /[^.]*$/i;
     let resultats = chemin.match(regex);
     return resultats[0];
@@ -335,15 +338,17 @@ document.getElementById("myfile").addEventListener("change", function () {
 
     document.querySelector("#alertes-erreurs > p").innerText = "";
 
-    const fichierTelecharge = document.getElementById("myfile").files[0];
+    const fichierTelecharge = document.getElementById("myfile").files[0]; // cherche les données de l'input type "file"
 
+    // Vérifie que l'extension du fichier est valide : png ou jpg
     if (recupExtension(fichierTelecharge.name) == "png" || recupExtension(fichierTelecharge.name) == "jpg") {
-        if (fichierTelecharge.size < 4194305) {
+        if (fichierTelecharge.size < 4194305) { // vérifie que la taille du fichier ne dépasse pas 4Mo
 
             const image = document.createElement('img');
             image.id = "image-telechargee";
             image.src = URL.createObjectURL(fichierTelecharge);
             image.style = "max-height: 100%";
+            // remplace le cadre "ajouter photo" par l'image téléchargée
             document.getElementById("ajout-image").getElementsByTagName("i")[0].setAttribute("style", "display: none");
             document.getElementById("ajout-image").getElementsByTagName("label")[0].setAttribute("style", "display: none");
             document.getElementById("ajout-image").getElementsByTagName("input")[0].setAttribute("style", "display: none");
@@ -361,7 +366,7 @@ document.getElementById("myfile").addEventListener("change", function () {
 
 });
 
-function annuleTelechargementPhoto() { // on vide le formulaire
+function annuleTelechargementPhoto() { // vide le formulaire
     if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) {
         document.getElementById("ajout-image").getElementsByTagName("i")[0].removeAttribute("style", "display: none");
         document.getElementById("ajout-image").getElementsByTagName("label")[0].removeAttribute("style", "display: none");
@@ -375,7 +380,7 @@ function annuleTelechargementPhoto() { // on vide le formulaire
     }
 };
 
-function recupNomCategorie(id) {
+function recupNomCategorie(id) { // retourne le nom de la catégorie en paramétrant l'id
     id = id - 1;
     return tableauNomCategorie[id];
 }
@@ -384,10 +389,10 @@ document.getElementById("valider").addEventListener("click", function valider() 
     if (validerFormulaire()) {
         let nomCategorie = recupNomCategorie(document.getElementById("categorie-photo").value);
         let formData = new FormData();
-        formData.append("image", imageTelechargee);
+        formData.append("image", imageTelechargee); // ajout de l'input type "file"
         formData.append("title", document.getElementById("titre-photo").value);
         formData.append("category", document.getElementById("categorie-photo").value);
-        fetch('http://localhost:5678/api/works', {
+        fetch('http://localhost:5678/api/works', { // envoie la requête POST pour ajouter le fichier à l'API
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem("token")}`
@@ -400,7 +405,8 @@ document.getElementById("valider").addEventListener("click", function valider() 
                 }
             })
             .then(function (work) {
-                if (document.getElementById("tous").style.color === "rgb(255, 255, 255)") { // Cas où le filtre sélectionné est tous
+                // Cas où le filtre sélectionné est tous
+                if (document.getElementById("tous").style.color === "rgb(255, 255, 255)") { 
                     divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
                     divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
                     divGallery.querySelector("figure:last-child").setAttribute("id", "galerie" + work.id);
@@ -411,7 +417,8 @@ document.getElementById("valider").addEventListener("click", function valider() 
                     divGallery.querySelector("figure:last-child figcaption").append(work.title);
                     allWorks = divGallery.innerHTML;
                 } else {
-                    if (document.getElementById(document.getElementById("categorie-photo").value).style.color !== "rgb(255, 255, 255)") { // cas où la photo à ajouter n'apparaitra pas dans le filtre
+                    // Cas où la photo à ajouter n'apparaitra pas dans le filtre
+                    if (document.getElementById(document.getElementById("categorie-photo").value).style.color !== "rgb(255, 255, 255)") { 
                         divGallery.innerHTML = allWorks;
                         divGallery.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
                         divGallery.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
@@ -446,6 +453,7 @@ document.getElementById("valider").addEventListener("click", function valider() 
                         travauxFiltres = divGallery.innerHTML;
                     }
                 }
+                // ajout du travail à la galerie modale
                 divGalerieModale.appendChild(document.createElement('figure')).appendChild(document.createElement('img'));
                 divGalerieModale.querySelector("figure:last-child").appendChild(document.createElement('figcaption'));
                 divGalerieModale.querySelector("figure:last-child").setAttribute("id", "galerie-modale" + work.id);
@@ -455,6 +463,7 @@ document.getElementById("valider").addEventListener("click", function valider() 
                 divGalerieModale.querySelector("figure:last-child img").setAttribute("src", work.imageUrl);
                 divGalerieModale.querySelector("figure:last-child img").setAttribute("alt", work.title);
                 divGalerieModale.querySelector("figure:last-child figcaption").append("éditer");
+                // ferme la modale
                 if (modale2 === null) return;
                 modale2.style.display = "none";
                 modale2.setAttribute("aria-hidden", "true");
@@ -464,6 +473,7 @@ document.getElementById("valider").addEventListener("click", function valider() 
                 modale2.querySelector(".js-retour").removeEventListener("click", fermerModale2);
                 modale2.querySelector(".js-stop-modale2").removeEventListener("click", stopPropagation);
                 modale2 = null;
+                // vide le formulaire
                 document.querySelector("#alertes-erreurs > p").innerText = "";
                 document.getElementById("ajout-image").getElementsByTagName("i")[0].removeAttribute("style", "display: none");
                 document.getElementById("ajout-image").getElementsByTagName("label")[0].removeAttribute("style", "display: none");
@@ -476,7 +486,7 @@ document.getElementById("valider").addEventListener("click", function valider() 
             })
             .catch(function (err) {
                 // Une erreur est survenue
-                console.log(err);
+                alert("Erreur " + err + "lors de l'envoi du formulaire");
             });
     } else {
         return null;
@@ -487,9 +497,10 @@ function validerFormulaire() { //valide ou non les éléments du formulaire en r
     let formulaire = false;
     let valeur = document.getElementById("titre-photo").value;
     valeur = valeur.trim(); // enlève espaces avant et après string
-    if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) { // cherche si l'image est présente dans le formulaire
-        if (valeur.length > 0) {
-            if (document.getElementById("categorie-photo").value != "") { //catégorie choisie ?
+    // cherche si l'image est présente dans le formulaire :
+    if (document.getElementById("image-telechargee") === document.getElementById("ajout-image").lastChild) { 
+        if (valeur.length > 0) { // Le titre est-il bien renseigné ?
+            if (document.getElementById("categorie-photo").value != "") { // la catégorie est-elle bien sélectionnée ?
                 formulaire = true;
             } else {
                 document.querySelector("#alertes-erreurs > p").innerText = "Veuillez choisir une catégorie";
