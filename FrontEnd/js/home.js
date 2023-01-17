@@ -124,7 +124,7 @@ fetch("http://localhost:5678/api/categories")
 function afficheFiltres() {
     document.querySelectorAll(".filtres").forEach(filtre => {
         filtre.addEventListener('click', function () {
-            divGallery.innerHTML = allWorks; // à chaque clic sur un filtre, on démarre avec l'ensemble des travaux
+            divGallery.innerHTML = allWorks; // à chaque clic sur un filtre, on charge l'ensemble des travaux
             Object.assign(divTous.style, styleFiltreInactif);
             for (let i of allCategories) {
                 if (i.name === filtre.innerText) {
@@ -141,7 +141,8 @@ function afficheFiltres() {
                 }
             }
             for (let item of monSet) {
-                divGallery.removeChild(document.getElementById(item)); // on supprime tous les travaux qui n'appartiennent pas au filtre sélectionné
+                // on supprime tous les travaux qui n'appartiennent pas au filtre sélectionné
+                divGallery.removeChild(document.getElementById(item)); 
             }
 
 
