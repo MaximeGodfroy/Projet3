@@ -6,7 +6,6 @@ document.getElementById("form").addEventListener('submit', function (e) {
         "email": email.value,
         "password": password.value
     }
-    let reponse = "";
     fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: {
